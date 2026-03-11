@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_plat', function (Blueprint $table) {
+        Schema::create('plats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->references('id')->on('categories');
-            $table->foreignId('plat_id')->references('id')->on('plats');
+            $table->string('name');
+            $table->string('description');
+            $table->decimal('price' , 8 , 2);
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('plats');
     }
 };

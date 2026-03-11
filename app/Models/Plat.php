@@ -12,7 +12,8 @@ class Plat extends Model
         'name',
         'description',
         'price',
-        'user_id'
+        'user_id',
+        'category_id'
     ];
 
     public function user() {
@@ -20,7 +21,7 @@ class Plat extends Model
     }
 
     public function categories() {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 }
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Plat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -12,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $categories = Category::where('user_id' , $request->user()->id)->get();
+
+        return response()->json([
+            'message' => 'this is all the user categories',
+            'plats' => $categories
+        ], 200);
     }
 
     /**
@@ -28,15 +35,30 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'name' => 'required|min:3|max:64',
+        ]);
+
+        $category = Category::create([
+            'name' => $request->name,
+            'user_id' => $request->user()->id
+        ]);
+
+        return response()->json([
+            'message' => 'category has seccesfully created!',
+            'plat' => $category
+        ] , 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request , Category $category)
+    public function show(Category $id)
     {
-        //
+        return response()->json([
+            'message' => 'this is your Category',
+            'plat' => $id
+        ]);
     }
 
     /**
@@ -50,21 +72,58 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request , Category $category)
+    public function update(Request $request , Category $id)
     {
-        //
+        $category = $id;
+        Gate::authorize('update' , $category);
+
+        $request->validate([
+            'name' => 'required|min:3|max:64',
+        ]);
+
+        $id->update([
+            'name' => $request->name,
+        ]);
+
+        return response()->json([
+            'message' => 'category has seccesfully updated!',
+            'category' => $id
+        ] , 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request , Category $category)
+    public function destroy(Category $id)
     {
-        //
+        $category = $id;
+        Gate::authorize('delete' , $category);
+        $id->delete();
+
+        return response()->json([
+            'message' => 'Category has seccesfully deleted!',
+        ] , 200);
     }
 
-    public function add(Request $request)
+    public function add(Request $request , $id)
     {
+        $request->validate([
+            'plat_id' => 'required|exists:plats,id'
+        ]);
+        $plat = Plat::findOrFail($request->plat_id);
+        $category = Category::findOrFail($id);
 
+        Gate::authorize('update', $plat);
+        Gate::authorize('update', $category);
+
+        $plat->update([
+            'category_id' => $id
+        ]);
+
+        return response()->json([
+            'message' => 'the plat has seccsefully added to category',
+            'plat' => $plat,
+            'category_id' => $id
+        ]);
     }
 }

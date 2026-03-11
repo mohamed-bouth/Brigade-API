@@ -37,7 +37,7 @@ class PlatPolicy
      */
     public function update(User $user, Plat $plat): bool
     {
-        return $user->id === $plat->user_id;;
+        return $user->id === $plat->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class PlatPolicy
      */
     public function delete(User $user, Plat $plat): bool
     {
-        return $user->id === $plat->user_id;;
+        return $user->id === $plat->user_id;
     }
 
     /**

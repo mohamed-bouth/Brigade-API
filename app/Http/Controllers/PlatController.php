@@ -77,7 +77,8 @@ class PlatController extends Controller
      */
     public function update(Request $request, Plat $id)
     {   
-        Gate::authorize('update' , $id);
+        $plat = $id;
+        Gate::authorize('update' , $plat);
 
         $request->validate([
             'name' => 'required|min:3|max:64',
@@ -102,7 +103,8 @@ class PlatController extends Controller
      */
     public function destroy(Plat $id)
     {   
-        Gate::authorize('delete' , $id);
+        $plat = $id;
+        Gate::authorize('delete' , $plat);
         $id->delete();
 
         return response()->json([

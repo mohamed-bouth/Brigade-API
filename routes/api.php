@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PlatController;
 use App\Http\Controllers\UserController;
 use GuzzleHttp\Middleware;
@@ -22,12 +23,12 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('plats/{id}' ,[PlatController::class , 'destroy']);
 
 
-    Route::post('categories' ,[PlatController::class , 'store']);
-    Route::get('categories' ,[PlatController::class , 'index']);
-    Route::get('categories/{id}' ,[PlatController::class , 'show']);
-    Route::put('categories/{id}' ,[PlatController::class , 'update']);
-    Route::delete('categories/{id}' ,[PlatController::class , 'destroy']);
-    Route::delete('categories/{id}/plats' ,[PlatController::class , 'add']);
+    Route::post('categories' ,[CategoryController::class , 'store']);
+    Route::get('categories' ,[CategoryController::class , 'index']);
+    Route::get('categories/{id}' ,[CategoryController::class , 'show']);
+    Route::put('categories/{id}' ,[CategoryController::class , 'update']);
+    Route::delete('categories/{id}' ,[CategoryController::class , 'destroy']);
+    Route::post('categories/{id}/plats' ,[CategoryController::class , 'add']);
 });
 
 
